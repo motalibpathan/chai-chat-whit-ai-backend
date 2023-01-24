@@ -27,7 +27,13 @@ const signupUser = async (req, res) => {
 
   try {
     const user = await UserModel.signup({ name, email, password, phone });
-    const { password: pw, __v, createdAt, updatedAt, ...rest } = user;
+    const {
+      password: pw,
+      __v,
+      createdAt,
+      updatedAt,
+      ...rest
+    } = user.toObject();
     const token = createToken({ _id: user._id });
     res.status(200).json({
       success: true,
@@ -51,8 +57,6 @@ const googleSignup = async (req, res) => {
     });
 
     const { email_verified, name, email, picture } = response.payload;
-
-    console.log(response.payload);
 
     if (email_verified) {
       const exist = await UserModel.findOne({ email });
@@ -158,7 +162,13 @@ const loginUser = async (req, res) => {
 
     // create a token
     const token = createToken({ _id: user._id });
-    const { password: pw, __v, createdAt, updatedAt, ...rest } = user;
+    const {
+      password: pw,
+      __v,
+      createdAt,
+      updatedAt,
+      ...rest
+    } = user.toObject();
     res.status(200).json({
       success: true,
       data: { user: rest, email, token },
@@ -181,12 +191,13 @@ const singleUser = async (req, res) => {
       });
     }
     const user = await UserModel.findById({ _id: id });
+    const { password, ...rest } = user.toObject();
     if (!user) {
       return res.status(400).json({ success: false, error: "Not such a user" });
     } else {
       res.status(200).json({
         success: true,
-        data: user,
+        data: { user: rest },
         message: "This is a single user",
       });
     }
