@@ -31,7 +31,11 @@ app.get("/", async (req, res) => {
   const clientIp2 =
     req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   console.log(`Client IP 2 address is: ${clientIp2}`);
-  res.send({ clientIp, clientIp2, date: new Date() });
+  res.send({
+    clientIp,
+    clientIp2,
+    date: new Date().toLocaleString("en-BD", { timeZone: "Asia/Dhaka" }),
+  });
 });
 
 app.use("/api/auth", userRoutes);
