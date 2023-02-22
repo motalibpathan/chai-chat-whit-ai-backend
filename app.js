@@ -25,6 +25,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // routing setup
+app.get("/", async (req, res) => {
+  const clientIp = req.ip;
+  console.log(`Client IP address is: ${clientIp}`);
+  const clientIp2 =
+    req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  console.log(`Client IP 2 address is: ${clientIp2}`);
+  res.send(req);
+});
 app.use("/api/auth", userRoutes);
 
 const PORT = process.env.PORT || 5000;
