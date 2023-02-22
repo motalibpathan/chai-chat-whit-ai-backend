@@ -31,8 +31,9 @@ app.get("/", async (req, res) => {
   const clientIp2 =
     req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   console.log(`Client IP 2 address is: ${clientIp2}`);
-  res.send(req);
+  res.send({ clientIp, clientIp2 });
 });
+
 app.use("/api/auth", userRoutes);
 
 const PORT = process.env.PORT || 5000;
